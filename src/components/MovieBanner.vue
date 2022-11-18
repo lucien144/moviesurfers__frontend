@@ -10,7 +10,6 @@ const props = defineProps<{
 }>();
 
 const permalink = computed(() => {
-	console.log(props.movie.categories)
 	const segment = props.movie.categories[0].slug;
 	return `/${segment}/${props.movie.slug}/`;
 });

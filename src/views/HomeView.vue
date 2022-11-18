@@ -63,13 +63,13 @@ onMounted(async () => {
 					v-for="movie in previews"
 					:key="movie.slug"
 					:movie="{
-						slug: banner.slug,
-						name: banner.title,
-						author: banner.author.name,
-						date: banner.date,
-						excerpt: banner.excerpt,
-						categories: banner.categories,
-						image: banner.featured_media
+						slug: movie.slug,
+						name: movie.title,
+						author: movie.author.name,
+						date: movie.date,
+						excerpt: movie.excerpt,
+						categories: movie.categories,
+						image: movie.featured_media
 				}"/>
 			</div>
 		</section>
