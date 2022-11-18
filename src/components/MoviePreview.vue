@@ -31,6 +31,7 @@ const permalink = computed(() => {
 
 <style lang="scss" scoped>
 .preview {
+	position: relative;
 	cursor: pointer;
 	transition: all .2s ease;
 
