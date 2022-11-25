@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import MovieBanner from '@/components/MovieBanner.vue';
 import MoviePreview from '@/components/MoviePreview.vue';
 import LoadingIcon from "@/components/LoadingIcon.vue";
@@ -24,7 +24,7 @@ onMounted(async () => {
 	<main v-if="loading" class="container mx-auto py-6">
 		<LoadingIcon class="w-[120px] h-[120px] mx-auto"/>
 	</main>
-	<main v-else class="container mx-auto py-6">
+	<main v-else class="container mx-auto p-3 md:px-0 md:py-6">
 		<section class="hero w-full grid grid-cols-12 md:grid-rows-3 gap-2 md:h-[60vh]">
 			<div class="md:row-span-3 col-span-12 md:col-span-7 h-[40vh] md:h-auto">
 				<MovieBanner

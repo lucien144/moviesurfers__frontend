@@ -3,8 +3,8 @@ import { RouterLink, RouterView } from 'vue-router';
 </script>
 
 <template>
-	<header class="container py-6 mx-auto text-center border-b-2 border-slate-800">
-		<h1 class="text-4xl">Movie Surfers</h1>
+	<header class="container p-3 md:px-0 md:py-6 mx-auto text-center border-b-2 border-slate-800">
+		<h1 class="text-4xl"><RouterLink to="/">Movie Surfers</RouterLink></h1>
 		<p class="text-xl m-0 p-0">
 			<span class="block py-3">🍿🤙</span>
 			<em>Čumět na filmy by nám šlo, psát už moc ne.</em>
