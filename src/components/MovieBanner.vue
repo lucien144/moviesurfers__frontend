@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {defineProps, computed} from 'vue';
-import type {Movie} from '@/types';
+import { defineProps, computed } from 'vue';
+import type { Movie } from '@/types';
 import MovieTags from '@/components/MovieTags.vue';
 import TimeAuthor from '@/components/TimeAuthor.vue';
 
@@ -24,8 +24,7 @@ const permalink = computed(() => {
 				:tags="props.movie.categories"
 			/>
 			<h2 class="mb-2 text-white" :class="[props.large ? 'text-6xl' : 'text-2xl']">{{ props.movie.name }}</h2>
-			<div v-if="props.large && props.movie.excerpt" class="mb-2 text-xl text-white"
-				 v-html="props.movie.excerpt"/>
+			<div v-if="props.large && props.movie.excerpt" class="mb-2 text-xl text-white" v-html="props.movie.excerpt"/>
 			<TimeAuthor :time="props.movie.date" :author="props.movie.author" class="text-gray-300"/>
 		</div>
 		<img class="w-full h-full object-cover rounded" :src="props.movie.image">

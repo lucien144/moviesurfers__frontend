@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import {onMounted, ref, reactive, watch} from 'vue';
-import {useRoute} from "vue-router";
-import {useHead} from '@unhead/vue';
+import {
+	onMounted, ref, reactive, watch, 
+} from 'vue';
+import { useRoute } from 'vue-router';
+import { useHead } from '@unhead/vue';
 import MovieBanner from '@/components/MovieBanner.vue';
 import MoviePreview from '@/components/MoviePreview.vue';
 import LoadingIcon from '@/components/LoadingIcon.vue';
 
 const route = useRoute();
-useHead({title: null});
+useHead({ title: null });
 
 const loading = ref(true);
 const banner = ref();
@@ -32,7 +34,6 @@ const fetchPosts = async (append = false) => {
 			throw new Error(json?.message);
 		}
 	} catch (e) {
-		console.warn(e);
 		json = [];
 	}
 
@@ -50,7 +51,7 @@ onMounted(() => {
 	fetchPosts();
 });
 
-watch(() => route.query.p, (page, old) => {
+watch(() => route.query.p, page => {
 	pagination.page = page ?? 1;
 	fetchPosts(true);
 });

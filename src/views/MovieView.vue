@@ -67,17 +67,19 @@ onMounted(async () => {
 						<span class="text-6xl">{{ movie.acf.rating }}</span> / 5
 					</div>
 
-					<div
-							v-if="movie.acf.rating_others"
-							v-for="other in movie.acf.rating_others"
-							class="w-1/3 md:w-1/5 p-4 text-center bg-amber-100 font-medium ml-1"
-					>
-						<div>
-							Hodnocení
-							<div class="font-mono text-xs">@{{ other.user.nickname }}</div>
+					<template v-if="movie.acf.rating_others">
+						<div
+								v-for="(other, key) in movie.acf.rating_others"
+								:key="key"
+								class="w-1/3 md:w-1/5 p-4 text-center bg-amber-100 font-medium ml-1"
+						>
+							<div>
+								Hodnocení
+								<div class="font-mono text-xs">@{{ other.user.nickname }}</div>
+							</div>
+							<span class="text-6xl">{{ other.rating }}</span> / 5
 						</div>
-						<span class="text-6xl">{{ other.rating }}</span> / 5
-					</div>
+					</template>
 				</div>
 			</div>
 		</article>
