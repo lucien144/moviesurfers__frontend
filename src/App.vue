@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router';
+import { useHead } from '@unhead/vue';
+
+useHead({ titleTemplate: (title?: string) => !title ? 'Movie Surfers' : `${title} - Movie Surfers` });
+
 </script>
 
 <template>

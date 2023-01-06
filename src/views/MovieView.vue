@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
-import {useRoute} from 'vue-router';
-import LoadingIcon from "@/components/LoadingIcon.vue";
-import TimeAuthor from "@/components/TimeAuthor.vue";
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { useHead } from '@unhead/vue';
+import LoadingIcon from '@/components/LoadingIcon.vue';
+import TimeAuthor from '@/components/TimeAuthor.vue';
 
 const route = useRoute();
 const loading = ref(true);
@@ -14,6 +15,8 @@ onMounted(async () => {
 	const json = await result.json();
 	movie.value = json[0];
 	loading.value = false;
+
+	useHead({ title: movie.value.title });
 });
 </script>
 

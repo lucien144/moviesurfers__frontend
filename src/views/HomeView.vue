@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
+import {useHead} from '@unhead/vue';
 import MovieBanner from '@/components/MovieBanner.vue';
 import MoviePreview from '@/components/MoviePreview.vue';
 import LoadingIcon from "@/components/LoadingIcon.vue";
+useHead({title: null});
 
 const loading = ref(true);
 const banner = ref();
