@@ -15,7 +15,11 @@ useHead({ titleTemplate: (title?: string) => !title ? 'Movie Surfers' : `${title
 		</p>
 	</header>
 
-	<RouterView/>
+	<router-view v-slot="{ Component }">
+		<keep-alive include="HomeView">
+			<component :is="Component" />
+		</keep-alive>
+	</router-view>
 
 	<footer class="container py-6 mx-auto border-t-2 text-gray-500 text-sm text-right font-sans">
 		&copy; {{ (new Date()).getFullYear() }} Všechna práva vyhrazena.

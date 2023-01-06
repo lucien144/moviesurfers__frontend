@@ -17,7 +17,7 @@ const banners = ref([]);
 const previews = ref([]);
 
 const pagination = reactive({
-	page: route.query.p ?? 1,
+	page: /*route.query.p ??*/ 1,
 	pages: 1,
 });
 
@@ -25,6 +25,7 @@ const fetchPosts = async (append = false) => {
 	loading.value = true;
 	let json = [];
 
+	pagination.page = append ? pagination.page + 1 : pagination.page;
 	try {
 		const result = await fetch(`${import.meta.env.VITE_API_URL}/posts?per_page=13&page=${pagination.page}`);
 		pagination.pages = result.headers.get('x-wp-totalpages') ?? pagination.pages;
@@ -49,11 +50,6 @@ const fetchPosts = async (append = false) => {
 
 onMounted(() => {
 	fetchPosts();
-});
-
-watch(() => route.query.p, page => {
-	pagination.page = page ?? 1;
-	fetchPosts(true);
 });
 </script>
 
@@ -110,8 +106,8 @@ watch(() => route.query.p, page => {
 		<LoadingIcon v-if="loading" class="w-[120px] h-[120px] mx-auto"/>
 
 		<aside v-if="pagination.page < pagination.pages" class="text-center mt-8 font-mono">
-			<RouterLink :to="{path: '/', query: {p: pagination.page + 1}}">&downarrow; <span
-				class="underline underline-offset-2 hover:no-underline">Načíst více</span></RouterLink>
+			<!--<RouterLink :to="{path: '/', query: {p: pagination.page + 1}}">&downarrow; <span class="underline underline-offset-2 hover:no-underline">Načíst více</span></RouterLink>-->
+			<button @click="fetchPosts(true)">&downarrow; <span class="underline underline-offset-2 hover:no-underline">Načíst více</span></button>
 		</aside>
 	</main>
 </template>
