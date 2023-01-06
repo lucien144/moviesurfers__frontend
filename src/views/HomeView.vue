@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, reactive, watch} from 'vue';
+import {useRoute} from "vue-router";
 import {useHead} from '@unhead/vue';
 import MovieBanner from '@/components/MovieBanner.vue';
 import MoviePreview from '@/components/MoviePreview.vue';
-import LoadingIcon from "@/components/LoadingIcon.vue";
+import LoadingIcon from '@/components/LoadingIcon.vue';
+
+const route = useRoute();
 useHead({title: null});
 
 const loading = ref(true);
@@ -11,26 +14,53 @@ const banner = ref();
 const banners = ref([]);
 const previews = ref([]);
 
-onMounted(async () => {
+const pagination = reactive({
+	page: route.query.p ?? 1,
+	pages: 1,
+});
+
+const fetchPosts = async (append = false) => {
 	loading.value = true;
-	const result = await fetch(`${import.meta.env.VITE_API_URL}/posts`);
-	const json = await result.json();
-	banner.value = json[0];
-	banners.value = json.slice(1, 4);
-	previews.value = json.slice(4);
+	let json = [];
+
+	try {
+		const result = await fetch(`${import.meta.env.VITE_API_URL}/posts?per_page=13&page=${pagination.page}`);
+		pagination.pages = result.headers.get('x-wp-totalpages') ?? pagination.pages;
+		json = await result.json();
+
+		if (result.status !== 200) {
+			throw new Error(json?.message);
+		}
+	} catch (e) {
+		console.warn(e);
+		json = [];
+	}
+
+	if (!append) {
+		banner.value = json[0] ?? {};
+		banners.value = json.slice(1, 4);
+		previews.value = json.slice(4);
+	} else {
+		previews.value = [...previews.value, ...json];
+	}
 	loading.value = false;
+};
+
+onMounted(() => {
+	fetchPosts();
+});
+
+watch(() => route.query.p, (page, old) => {
+	pagination.page = page ?? 1;
+	fetchPosts(true);
 });
 </script>
 
 <template>
-	<main v-if="loading" class="container mx-auto py-6">
-		<LoadingIcon class="w-[120px] h-[120px] mx-auto"/>
-	</main>
-	<main v-else class="container mx-auto p-3 md:px-0 md:py-6">
-		<section class="hero w-full grid grid-cols-12 md:grid-rows-3 gap-2 md:h-[60vh]">
+	<main class="container mx-auto p-3 md:px-0 md:py-6">
+		<section v-if="banner && banners" class="hero w-full grid grid-cols-12 md:grid-rows-3 gap-2 md:h-[60vh] md:min-h-[640px]">
 			<div class="md:row-span-3 col-span-12 md:col-span-7 h-[40vh] md:h-auto">
 				<MovieBanner
-					v-if="banner"
 					large
 					:movie="{
 						slug: banner.slug,
@@ -75,5 +105,12 @@ onMounted(async () => {
 				}"/>
 			</div>
 		</section>
+
+		<LoadingIcon v-if="loading" class="w-[120px] h-[120px] mx-auto"/>
+
+		<aside v-if="pagination.page < pagination.pages" class="text-center mt-8 font-mono">
+			<RouterLink :to="{path: '/', query: {p: pagination.page + 1}}">&downarrow; <span
+				class="underline underline-offset-2 hover:no-underline">Načíst více</span></RouterLink>
+		</aside>
 	</main>
 </template>
