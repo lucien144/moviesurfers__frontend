@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
+import dayjs from 'dayjs';
 
 const props = defineProps<{
 	time: string,
@@ -8,5 +9,5 @@ const props = defineProps<{
 </script>
 
 <template>
-	<p class="font-mono text-xs"><time v-text="props.time"/> / {{ props.author }}</p>
+	<p class="font-mono text-xs"><time v-text="dayjs(props.time).format('DD. MM. YYYY')"/> / {{ props.author }}</p>
 </template>
