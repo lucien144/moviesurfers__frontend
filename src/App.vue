@@ -14,7 +14,7 @@ import { RouterLink, RouterView } from 'vue-router';
 	<RouterView/>
 
 	<footer class="container py-6 mx-auto border-t-2 text-gray-500 text-sm text-right font-sans">
-		&copy; 2022 Všechna práva vyhrazena.
+		&copy; {{ (new Date()).getFullYear() }} Všechna práva vyhrazena.
 	</footer>
 </template>
 
