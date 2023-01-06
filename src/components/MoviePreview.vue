@@ -3,6 +3,7 @@ import type { Movie } from '@/types';
 import MovieTags from '@/components/MovieTags.vue';
 import TimeAuthor from '@/components/TimeAuthor.vue';
 import { computed } from 'vue';
+import {transformImage} from "@/libs/imagekit";
 
 const props = defineProps<{
 	movie: Movie,
@@ -16,7 +17,7 @@ const permalink = computed(() => {
 
 <template>
 	<article class="preview flex flex-col">
-		<img class="mb-2 h-full w-full object-cover rounded" :src="props.movie.image">
+		<img class="mb-2 h-full w-full object-cover rounded" :src="transformImage(props.movie.image, 'tr:w-635,h-245,f-jpg')">
 		<h2 class="mb-2 text-xl">{{ props.movie.name }}</h2>
 		<MovieTags
 			class="mb-2"
