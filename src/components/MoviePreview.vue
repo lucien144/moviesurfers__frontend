@@ -17,7 +17,11 @@ const permalink = computed(() => {
 
 <template>
 	<article class="preview flex flex-col">
-		<img class="mb-2 h-full w-full object-cover rounded" :src="transformImage(props.movie.image, 'tr:w-635,h-245,f-jpg')">
+		<picture>
+			<source :srcset="transformImage(props.movie.image, 'tr:w-635,h-245,f-jpg')" type="image/jpg">
+			<source :srcset="transformImage(props.movie.image, 'tr:w-635,h-245,f-webp')" type="image/webp">
+			<img class="mb-2 h-full w-full shrink object-cover rounded" :src="transformImage(props.movie.image, 'tr:w-635,h-245,f-jpg')">
+		</picture>
 		<h2 class="mb-2 text-xl">{{ props.movie.name }}</h2>
 		<MovieTags
 			class="mb-2"

@@ -28,7 +28,11 @@ const permalink = computed(() => {
 			<div v-if="props.large && props.movie.excerpt" class="mb-2 text-xl text-white" v-html="props.movie.excerpt"/>
 			<TimeAuthor :time="props.movie.date" :author="props.movie.author" class="text-gray-300"/>
 		</div>
-		<img class="w-full h-full object-cover rounded" :src="transformImage(props.movie.image, 'tr:w-893,h-745,f-jpg')">
+		<picture>
+			<source :srcset="transformImage(props.movie.image, 'tr:w-893,h-745,f-jpg')" type="image/jpg">
+			<source :srcset="transformImage(props.movie.image, 'tr:w-893,h-745,f-webp')" type="image/webp">
+			<img class="w-full h-full object-cover rounded" :src="transformImage(props.movie.image, 'tr:w-893,h-745,f-jpg')">
+		</picture>
 		<RouterLink class="banner__cta" :to="permalink">Číst více</RouterLink>
 	</article>
 </template>
