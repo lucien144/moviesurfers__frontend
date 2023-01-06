@@ -37,6 +37,6 @@
     "vue-tsc": "^1.0.8"
   },
   "optionalDependencies": {
-	"esbuild-freebsd-64": "0.15.18"
+	"esbuild-linux-32": "0.15.18"
   }
 }
