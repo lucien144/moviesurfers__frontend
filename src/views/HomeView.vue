@@ -58,7 +58,7 @@ const fetchPosts = async (category: number[]) => {
 onMounted(async () => {
 	await fetchSticky();
 	loading.value = true;
-	[reviews.value, trailers.value] = await Promise.all([fetchPosts([8]), fetchPosts([14])]); // Recenze + trailery
+	[reviews.value, trailers.value] = await Promise.all([fetchPosts([8]), fetchPosts([4, 14])]); // Recenze + trailery
 	loading.value = false;
 });
 </script>
