@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 import { useHead } from '@unhead/vue';
 import LoadingIcon from '@/components/LoadingIcon.vue';
 import TimeAuthor from '@/components/TimeAuthor.vue';
+import MovieTags from "@/components/MovieTags.vue";
 
 const route = useRoute();
 const loading = ref(true);
@@ -21,23 +22,24 @@ onMounted(async () => {
 </script>
 
 <template>
-	<main v-if="loading" class="container mx-auto py-6">
+	<main v-if="loading" class="container mx-auto py-32">
 		<LoadingIcon class="w-[120px] h-[120px] mx-auto"/>
 	</main>
-	<main v-else class="container mx-auto p-3 md:px-0 md:py-6">
-		<nav>
+	<main v-else class="container mx-auto py-16">
+		<nav class="my-8">
 			<RouterLink to="/" class="font-mono">&larr; <span class="underline hover:no-underline">zpět</span>
 			</RouterLink>
 		</nav>
 
-		<div class="w-2/3 mx-auto">
-
-		</div>
-
 		<article>
-			<div class="prose lg:prose-xl mx-auto text-center pb-6">
+			<div class="prose lg:prose-xl mx-auto text-center pb-16">
 				<h1 v-html="movie.title"/>
-				<div>
+				<div class="flex flex-col items-center not-prose">
+					<MovieTags
+							class="mb-8"
+							large
+							:tags="movie.categories"
+					/>
 					<TimeAuthor :time="movie.date" :author="movie.author.name"/>
 				</div>
 			</div>
@@ -59,7 +61,7 @@ onMounted(async () => {
 
 			<div class="prose lg:prose-xl mx-auto">
 				<div class="flex justify-end">
-					<div class="w-1/3 md:w-1/5 p-4 text-center bg-amber-400 font-medium">
+					<div class="w-1/3 md:w-1/5 p-8 text-center bg-amber-400 font-medium">
 						<div>
 							Hodnocení
 							<div class="font-mono text-xs">@{{ movie.author.name }}</div>
@@ -71,7 +73,7 @@ onMounted(async () => {
 						<div
 								v-for="(other, key) in movie.acf.rating_others"
 								:key="key"
-								class="w-1/3 md:w-1/5 p-4 text-center bg-amber-100 font-medium ml-1"
+								class="w-1/3 md:w-1/5 p-8 text-center bg-amber-100 font-medium ml-1"
 						>
 							<div>
 								Hodnocení

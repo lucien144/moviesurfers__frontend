@@ -18,18 +18,19 @@ const permalink = computed(() => {
 <template>
 	<article class="preview flex flex-col">
 		<picture>
-			<source :srcset="transformImage(props.movie.image, 'tr:w-635,h-245,f-jpg')" type="image/jpg">
 			<source :srcset="transformImage(props.movie.image, 'tr:w-635,h-245,f-webp')" type="image/webp">
-			<img class="mb-2 h-full w-full shrink object-cover rounded" :src="transformImage(props.movie.image, 'tr:w-635,h-245,f-jpg')">
+			<source :srcset="transformImage(props.movie.image, 'tr:w-635,h-245,f-jpg')" type="image/jpg">
+			<img class="mb-8 h-full w-full shrink object-cover rounded" :src="transformImage(props.movie.image, 'tr:w-635,h-245,f-jpg')">
 		</picture>
-		<h2 class="mb-2 text-xl">{{ props.movie.name }}</h2>
-		<MovieTags
-			class="mb-2"
-			large
-			:tags="props.movie.categories"
-		/>
-		<TimeAuthor :time="props.movie.date" :author="props.movie.author"/>
-		<div v-if="props.movie.excerpt" v-html="props.movie.excerpt"/>
+		<h2 class="mb-8 text-xl font-semibold">{{ props.movie.name }}</h2>
+		<div class="flex items-center space-x-4">
+			<MovieTags
+					large
+					:tags="props.movie.categories"
+			/>
+			<TimeAuthor :time="props.movie.date" :author="props.movie.author"/>
+		</div>
+<!--		<div v-if="props.movie.excerpt" v-html="props.movie.excerpt"/>-->
 		<RouterLink class="preview__cta" :to="permalink">Číst více</RouterLink>
 	</article>
 </template>

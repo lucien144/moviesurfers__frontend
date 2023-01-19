@@ -11,24 +11,22 @@ import LoadingIcon from '@/components/LoadingIcon.vue';
 const route = useRoute();
 useHead({ title: null });
 
+const loadingSticky = ref(true);
 const loading = ref(true);
-const banner = ref();
-const banners = ref([]);
-const previews = ref([]);
+const reviews = ref([]);
+const trailers = ref([]);
+const stickies = ref([]);
 
 const pagination = reactive({
 	page: /*route.query.p ??*/ 1,
 	pages: 1,
 });
 
-const fetchPosts = async (append = false) => {
-	loading.value = true;
+const fetchApi = async (uri: string) => {
 	let json = [];
 
-	pagination.page = append ? pagination.page + 1 : pagination.page;
 	try {
-		const result = await fetch(`${import.meta.env.VITE_API_URL}/posts?per_page=13&page=${pagination.page}`);
-		pagination.pages = result.headers.get('x-wp-totalpages') ?? pagination.pages;
+		const result = await fetch(`${import.meta.env.VITE_API_URL}${uri}`);
 		json = await result.json();
 
 		if (result.status !== 200) {
@@ -38,60 +36,44 @@ const fetchPosts = async (append = false) => {
 		json = [];
 	}
 
-	if (!append) {
-		banner.value = json[0] ?? {};
-		banners.value = json.slice(1, 4);
-		previews.value = json.slice(4);
-	} else {
-		previews.value = [...previews.value, ...json];
-	}
-	loading.value = false;
+	return json;
 };
 
-onMounted(() => {
-	fetchPosts();
+const fetchSticky = async () => {
+	loadingSticky.value = true;
+	let json = await fetchApi(`/posts?per_page=2&sticky=1`);
+
+	if (json.length <= 2) {
+		json = [...json, ...(await fetchApi(`/posts?per_page=${2 - json.length}&exclude=${json.map(movie => movie.id).join(',')}`))];
+	}
+
+	stickies.value = json;
+	loadingSticky.value = false;
+};
+
+const fetchPosts = async (category: number[]) => {
+	return await fetchApi(`/posts?per_page=8&categories=${category.join(',')}&exclude=${stickies.value.map(movie => movie.id).join(',')}`);
+};
+
+onMounted(async () => {
+	await fetchSticky();
+	loading.value = true;
+	[reviews.value, trailers.value] = await Promise.all([fetchPosts([8]), fetchPosts([14])]); // Recenze + trailery
+	loading.value = false;
 });
 </script>
 
 <template>
-	<main class="container mx-auto p-3 md:px-0 md:py-6">
-		<section v-if="banner && banners" class="hero w-full grid grid-cols-12 md:grid-rows-3 gap-2 md:h-[60vh] md:min-h-[640px]">
-			<div class="md:row-span-3 col-span-12 md:col-span-7 h-[40vh] md:h-auto">
+	<main class="container mx-auto py-16">
+		<section v-if="stickies.length" class="hero w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:h-[60vh] md:min-h-[640px]">
+			<div
+				v-for="movie in stickies"
+				:key="movie.id"
+				class="h-[40vh] md:h-auto"
+			>
 				<MovieBanner
-					large
-					:movie="{
-						slug: banner.slug,
-						name: banner.title,
-						author: banner.author.name,
-						date: banner.date,
-						excerpt: banner.excerpt,
-						categories: banner.categories,
-						image: banner.featured_media
-					}"
-				/>
-			</div>
-			<MovieBanner
-				v-for="movie in banners"
-				:key="movie.slug"
-				class="col-span-12 md:col-span-5"
-				:movie="{
-					slug: movie.slug,
-					name: movie.title,
-					author: movie.author.name,
-					date: movie.date,
-					excerpt: movie.excerpt,
-					categories: movie.categories,
-					image: movie.featured_media
-				}"
-			/>
-		</section>
-
-		<section v-if="previews.length > 0">
-			<div class="grid grid-cols-1 md:grid-cols-3 gap-4 py-6">
-				<MoviePreview
-					v-for="movie in previews"
-					:key="movie.slug"
-					:movie="{
+						large
+						:movie="{
 						slug: movie.slug,
 						name: movie.title,
 						author: movie.author.name,
@@ -99,15 +81,38 @@ onMounted(() => {
 						excerpt: movie.excerpt,
 						categories: movie.categories,
 						image: movie.featured_media
-				}"/>
+					}"
+				/>
 			</div>
 		</section>
 
+		<template v-for="(section, index) in [reviews, trailers]" :key="index">
+			<section v-if="section.length > 0" class="mt-32">
+				<h2 class="text-2xl font-extrabold border-b-2 pb-8 mb-8">
+					{{ index === 0 ? 'Recenze' : 'Trailery' }}
+				</h2>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-16">
+					<MoviePreview
+						v-for="movie in section"
+						:key="movie.slug"
+						:movie="{
+							slug: movie.slug,
+							name: movie.title,
+							author: movie.author.name,
+							date: movie.date,
+							excerpt: movie.excerpt,
+							categories: movie.categories,
+							image: movie.featured_media
+					}"/>
+				</div>
+			</section>
+		</template>
+
 		<LoadingIcon v-if="loading" class="w-[120px] h-[120px] mx-auto"/>
 
-		<aside v-if="pagination.page < pagination.pages" class="text-center mt-8 font-mono">
-			<!--<RouterLink :to="{path: '/', query: {p: pagination.page + 1}}">&downarrow; <span class="underline underline-offset-2 hover:no-underline">Načíst více</span></RouterLink>-->
-			<button @click="fetchPosts(true)">&downarrow; <span class="underline underline-offset-2 hover:no-underline">Načíst více</span></button>
-		</aside>
+<!--		<aside v-if="pagination.page < pagination.pages" class="text-center mt-8 font-mono">-->
+<!--			&lt;!&ndash;<RouterLink :to="{path: '/', query: {p: pagination.page + 1}}">&downarrow; <span class="underline underline-offset-2 hover:no-underline">Načíst více</span></RouterLink>&ndash;&gt;-->
+<!--			<button @click="fetchPosts(true)">&downarrow; <span class="underline underline-offset-2 hover:no-underline">Načíst více</span></button>-->
+<!--		</aside>-->
 	</main>
 </template>

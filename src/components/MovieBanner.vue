@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { defineProps, computed } from 'vue';
-import type { Movie } from '@/types';
+import {defineProps, computed} from 'vue';
+import type {Movie} from '@/types';
 import MovieTags from '@/components/MovieTags.vue';
 import TimeAuthor from '@/components/TimeAuthor.vue';
 import {transformImage} from "@/libs/imagekit";
@@ -19,19 +19,29 @@ const permalink = computed(() => {
 <template>
 	<article class="banner h-full">
 		<div class="banner__body">
-			<MovieTags
-				class="mb-2"
-				large
-				:tags="props.movie.categories"
+			<h2
+				class="mb-8 text-white font-bold"
+				:class="[props.large ? 'text-2xl md:text-6xl' : 'text-2xl']">
+					{{ props.movie.name }}
+			</h2>
+			<div
+				v-if="props.large && props.movie.excerpt"
+				class="mb-8 text-md md:text-xl text-white"
+				v-html="props.movie.excerpt"
 			/>
-			<h2 class="mb-2 text-white" :class="[props.large ? 'text-6xl' : 'text-2xl']">{{ props.movie.name }}</h2>
-			<div v-if="props.large && props.movie.excerpt" class="mb-2 text-xl text-white" v-html="props.movie.excerpt"/>
-			<TimeAuthor :time="props.movie.date" :author="props.movie.author" class="text-gray-300"/>
+			<div class="flex items-center space-x-4">
+				<MovieTags
+					large
+					:tags="props.movie.categories"
+				/>
+				<TimeAuthor :time="props.movie.date" :author="props.movie.author" class="text-gray-300"/>
+			</div>
 		</div>
 		<picture>
-			<source :srcset="transformImage(props.movie.image, 'tr:w-893,h-745,f-jpg')" type="image/jpg">
 			<source :srcset="transformImage(props.movie.image, 'tr:w-893,h-745,f-webp')" type="image/webp">
-			<img class="w-full h-full object-cover rounded" :src="transformImage(props.movie.image, 'tr:w-893,h-745,f-jpg')">
+			<source :srcset="transformImage(props.movie.image, 'tr:w-893,h-745,f-jpg')" type="image/jpg">
+			<img class="w-full h-full object-cover rounded"
+				 :src="transformImage(props.movie.image, 'tr:w-893,h-745,f-jpg')">
 		</picture>
 		<RouterLink class="banner__cta" :to="permalink">Číst více</RouterLink>
 	</article>
