@@ -8,8 +8,12 @@ module.exports = {
 	],
 	theme: {
 		extend: {
-			fontFamily: {
-				'sans': ['"Noto Sans"', ...defaultTheme.fontFamily.sans],
+			fontFamily: { 'sans': ['"Noto Sans"', ...defaultTheme.fontFamily.sans] },
+			colors: {
+				'film': '#3976F0',
+				'serial': '#39F084',
+				'hry': '#B339F0',
+				'kultovky': '#F0394F',
 			},
 		},
 		spacing: {

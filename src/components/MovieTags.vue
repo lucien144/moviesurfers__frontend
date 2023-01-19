@@ -13,7 +13,11 @@ const props = defineProps<{
 			v-for="tag in props.tags"
 			:key="tag"
 			class="inline p-4 mr-4 bg-amber-400 font-mono uppercase"
-			:class="[props.large ? 'text-sm' : 'text-xs']"
+			:class="[
+				props.large ? 'text-sm' : 'text-xs',
+				{'bg-film': tag.slug === 'film'},
+				{'bg-serial': tag.slug === 'serial'},
+			]"
 			v-text="tag.title"
 		/>
 	</ul>

@@ -1,19 +1,15 @@
 <script setup lang="ts">
-import {defineProps, computed} from 'vue';
-import type {Movie} from '@/types';
+import { defineProps, computed } from 'vue';
+import type { Movie } from '@/types';
+import { permalink } from '@/libs/helpers';
 import MovieTags from '@/components/MovieTags.vue';
 import TimeAuthor from '@/components/TimeAuthor.vue';
-import {transformImage} from "@/libs/imagekit";
+import { transformImage } from '@/libs/imagekit';
 
 const props = defineProps<{
 	large?: boolean,
 	movie: Movie,
 }>();
-
-const permalink = computed(() => {
-	const segment = props.movie.categories[0].slug;
-	return `/${segment}/${props.movie.slug}/`;
-});
 </script>
 
 <template>
@@ -40,10 +36,18 @@ const permalink = computed(() => {
 		<picture>
 			<source :srcset="transformImage(props.movie.image, 'tr:w-893,h-745,f-webp')" type="image/webp">
 			<source :srcset="transformImage(props.movie.image, 'tr:w-893,h-745,f-jpg')" type="image/jpg">
-			<img class="w-full h-full object-cover rounded"
-				 :src="transformImage(props.movie.image, 'tr:w-893,h-745,f-jpg')">
+			<img
+				v-if="props.movie.image"
+				class="w-full h-full object-cover rounded"
+				:src="transformImage(props.movie.image, 'tr:w-893,h-745,f-jpg')"
+			>
+			<img
+				v-else
+				class="w-full h-full object-cover rounded"
+				src="https://picsum.photos/893/745"
+			>
 		</picture>
-		<RouterLink class="banner__cta" :to="permalink">Číst více</RouterLink>
+		<RouterLink class="banner__cta" :to="permalink(props.movie.categories, props.movie.slug)">Číst více</RouterLink>
 	</article>
 </template>
 

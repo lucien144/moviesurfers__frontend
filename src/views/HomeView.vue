@@ -51,14 +51,14 @@ const fetchSticky = async () => {
 	loadingSticky.value = false;
 };
 
-const fetchPosts = async (category: number[]) => {
-	return await fetchApi(`/posts?per_page=8&categories=${category.join(',')}&exclude=${stickies.value.map(movie => movie.id).join(',')}`);
+const fetchPosts = async (category: number[], limit: number = 6) => {
+	return await fetchApi(`/posts?per_page=${limit}&categories=${category.join(',')}&exclude=${stickies.value.map(movie => movie.id).join(',')}`);
 };
 
 onMounted(async () => {
 	await fetchSticky();
 	loading.value = true;
-	[reviews.value, trailers.value] = await Promise.all([fetchPosts([8]), fetchPosts([4, 14])]); // Recenze + trailery
+	[reviews.value, trailers.value] = await Promise.all([fetchPosts([8], 3), fetchPosts([4, 14], 10)]); // Recenze + trailery
 	loading.value = false;
 });
 </script>
@@ -86,12 +86,18 @@ onMounted(async () => {
 			</div>
 		</section>
 
-		<template v-for="(section, index) in [reviews, trailers]" :key="index">
+		<template v-for="(section, index) in [trailers, reviews]" :key="index">
 			<section v-if="section.length > 0" class="mt-32">
 				<h2 class="text-2xl font-extrabold border-b-2 pb-8 mb-8">
-					{{ index === 0 ? 'Recenze' : 'Trailery' }}
+					{{ index === 0 ? 'Trailery' : 'Recenze' }}
 				</h2>
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-16">
+				<div
+					class="grid grid-cols-1 gap-8 pb-16"
+					:class="{
+						'sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5': index === 0,
+						'md:grid-cols-3': index === 1
+					}"
+				>
 					<MoviePreview
 						v-for="movie in section"
 						:key="movie.slug"
@@ -99,7 +105,6 @@ onMounted(async () => {
 							slug: movie.slug,
 							name: movie.title,
 							author: movie.author.name,
-							date: movie.date,
 							excerpt: movie.excerpt,
 							categories: movie.categories,
 							image: movie.featured_media
