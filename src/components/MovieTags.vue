@@ -17,6 +17,8 @@ const props = defineProps<{
 				props.large ? 'text-sm' : 'text-xs',
 				{'bg-film': tag.slug === 'film'},
 				{'bg-serial': tag.slug === 'serial'},
+				{'bg-hry': tag.slug === 'hry'},
+				{'bg-kultovky': tag.slug === 'kultovky'},
 			]"
 			v-text="tag.title"
 		/>
