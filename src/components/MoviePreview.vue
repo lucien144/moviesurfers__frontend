@@ -13,12 +13,12 @@ const props = defineProps<{
 <template>
 	<article class="preview flex flex-col">
 		<picture class="mb-8">
-			<source :srcset="transformImage(props.movie.image, 'tr:w-635,h-245,f-webp')" type="image/webp">
-			<source :srcset="transformImage(props.movie.image, 'tr:w-635,h-245,f-jpg')" type="image/jpg">
+			<source :srcset="transformImage(props.movie.image, 'tr:w-635,h-400,f-webp')" type="image/webp">
+			<source :srcset="transformImage(props.movie.image, 'tr:w-635,h-400,f-jpg')" type="image/jpg">
 			<img
 				v-if="props.movie.image"
 				class="mb-8 h-full w-full shrink object-cover rounded"
-				:src="transformImage(props.movie.image, 'tr:w-635,h-245,f-jpg')"
+				:src="transformImage(props.movie.image, 'tr:w-635,h-400,f-jpg')"
 			>
 			<img
 				v-else

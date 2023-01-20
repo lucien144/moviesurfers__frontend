@@ -4,6 +4,7 @@ import {
 } from 'vue';
 import { useRoute } from 'vue-router';
 import { useHead } from '@unhead/vue';
+import { transformImage } from '@/libs/imagekit';
 import MovieBanner from '@/components/MovieBanner.vue';
 import MoviePreview from '@/components/MoviePreview.vue';
 import LoadingIcon from '@/components/LoadingIcon.vue';
@@ -16,6 +17,7 @@ const loading = ref(true);
 const reviews = ref([]);
 const trailers = ref([]);
 const stickies = ref([]);
+const posters = ref([]);
 
 const pagination = reactive({
 	page: /*route.query.p ??*/ 1,
@@ -58,7 +60,7 @@ const fetchPosts = async (category: number[], limit: number = 6) => {
 onMounted(async () => {
 	await fetchSticky();
 	loading.value = true;
-	[reviews.value, trailers.value] = await Promise.all([fetchPosts([8], 3), fetchPosts([4, 14], 10)]); // Recenze + trailery
+	[reviews.value, trailers.value, posters.value] = await Promise.all([fetchPosts([8], 3), fetchPosts([4, 14], 10), fetchApi('/posters?per_page=6')]); // Recenze + trailery + postery
 	loading.value = false;
 });
 </script>
@@ -112,6 +114,33 @@ onMounted(async () => {
 				</div>
 			</section>
 		</template>
+
+		<section v-if="posters.length > 0" class="mt-32">
+			<h2 class="text-2xl font-extrabold border-b-2 pb-8 mb-8">
+				Filmové plakáty
+			</h2>
+			<div class="grid grid-cols-1 md:grid-cols-6 gap-8 pb-16">
+				<div v-for="poster in posters" class="mb-8 relative flex flex-col transform transition duration-1 ease-out hover:scale-[1.01]" :key="poster.id">
+					<picture>
+						<template v-if="poster.featured_media">
+							<source :srcset="transformImage(poster.featured_media, 'tr:w-1296,h-1920,f-webp')" type="image/webp">
+							<source :srcset="transformImage(poster.featured_media, 'tr:w-1296,h-1920,f-jpg')" type="image/jpg">
+							<img
+									class="mb-8 h-full w-full shrink object-cover rounded"
+									:src="transformImage(poster.featured_media, 'tr:w-1296,h-1920,f-jpg')"
+							>
+						</template>
+						<img
+								v-else
+								class="mb-8 h-full w-full shrink object-cover rounded"
+								src="https://picsum.photos/1296/1920"
+						>
+					</picture>
+					<p class="text-sm text-center mt-4">{{ poster.title }}</p>
+					<a :href="poster.featured_media" target="_blank" class="absolute inset-0 opacity-0">Zobrazit</a>
+				</div>
+			</div>
+		</section>
 
 		<LoadingIcon v-if="loading" class="w-[120px] h-[120px] mx-auto"/>
 
