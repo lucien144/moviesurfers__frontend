@@ -15,7 +15,7 @@ const props = defineProps<{
 			class="inline p-4 mr-4 bg-amber-400 font-mono uppercase"
 			:class="[
 				props.large ? 'text-sm' : 'text-xs',
-				{'bg-film': tag.slug === 'film'},
+				{'bg-film hidden': tag.slug === 'film'},
 				{'bg-serial': tag.slug === 'serial'},
 				{'bg-hry': tag.slug === 'hry'},
 				{'bg-kultovky': tag.slug === 'kultovky'},
