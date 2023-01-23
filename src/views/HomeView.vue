@@ -123,11 +123,11 @@ onMounted(async () => {
 				<div v-for="poster in posters" class="mb-8 relative flex flex-col transform transition duration-1 ease-out hover:scale-[1.01]" :key="poster.id">
 					<picture>
 						<template v-if="poster.featured_media">
-							<source :srcset="transformImage(poster.featured_media, 'tr:w-1296,h-1920,f-webp')" type="image/webp">
-							<source :srcset="transformImage(poster.featured_media, 'tr:w-1296,h-1920,f-jpg')" type="image/jpg">
+							<source :srcset="transformImage(poster.featured_media, 'tr:w-250,h-370,f-webp')" type="image/webp">
+							<source :srcset="transformImage(poster.featured_media, 'tr:w-250,h-370,f-jpg')" type="image/jpg">
 							<img
 									class="mb-8 h-full w-full shrink object-cover rounded"
-									:src="transformImage(poster.featured_media, 'tr:w-1296,h-1920,f-jpg')"
+									:src="transformImage(poster.featured_media, 'tr:w-250,h-370,f-jpg')"
 							>
 						</template>
 						<img
@@ -137,7 +137,7 @@ onMounted(async () => {
 						>
 					</picture>
 					<p class="text-sm text-center mt-4">{{ poster.title }}</p>
-					<a :href="poster.featured_media" target="_blank" class="absolute inset-0 opacity-0">Zobrazit</a>
+					<a :href="transformImage(poster.featured_media, 'tr:w-1296,h-1920,f-jpg')" target="_blank" class="absolute inset-0 opacity-0">Zobrazit</a>
 				</div>
 			</div>
 		</section>
