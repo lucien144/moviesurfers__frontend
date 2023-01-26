@@ -11,9 +11,16 @@ const router = createRouter({
 			component: HomeView,
 		},
 		{
+			path: '/aktualne/:slug',
+			name: 'aktualne',
+			component: MovieView,
+			props: { type: 'news' },
+		},
+		{
 			path: '/:category/:slug',
 			name: 'movie',
 			component: MovieView,
+			props: { type: 'posts' },
 		},
 	],
 });

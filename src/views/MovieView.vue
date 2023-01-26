@@ -4,20 +4,25 @@ import { useRoute } from 'vue-router';
 import { useHead } from '@unhead/vue';
 import LoadingIcon from '@/components/LoadingIcon.vue';
 import TimeAuthor from '@/components/TimeAuthor.vue';
-import MovieTags from "@/components/MovieTags.vue";
+import MovieTags from '@/components/MovieTags.vue';
 
 const route = useRoute();
 const loading = ref(true);
 const movie = ref();
 
+const props = defineProps({ type: String });
+
 onMounted(async () => {
 	loading.value = true;
-	const result = await fetch(`${import.meta.env.VITE_API_URL}/posts?acf_format=standard&slug=${route.params.slug}`);
+	const result = await fetch(`${import.meta.env.VITE_API_URL}/${props.type}?acf_format=standard&slug=${route.params.slug}`);
 	const json = await result.json();
 	movie.value = json[0];
 	loading.value = false;
-
 	useHead({ title: movie.value.title });
+
+	window.twttr.ready(twttr => {
+		twttr.widgets.load();
+	});
 });
 </script>
 
@@ -46,7 +51,6 @@ onMounted(async () => {
 
 			<iframe
 				v-if="movie.acf.youtube_id"
-				class="w-3/4 aspect-video mx-auto"
 				:src="`https://www.youtube.com/embed/${movie.acf.youtube_id}`"
 				:title="movie.title"
 				frameborder="0"
@@ -55,11 +59,9 @@ onMounted(async () => {
 			/>
 			<img v-else-if="movie.featured_media" :src="movie.featured_media" class="max-h-[80vh] w-full object-cover">
 
-			<div class="prose lg:prose-xl mx-auto">
-				<div v-html="movie.content"/>
-			</div>
+			<div v-html="movie.content"/>
 
-			<div class="prose lg:prose-xl mx-auto">
+			<div v-if="props.type === 'posts'" class="prose lg:prose-xl mx-auto">
 				<div class="flex justify-end">
 					<div class="w-1/3 md:w-1/5 p-8 text-center bg-amber-400 font-medium">
 						<div>
@@ -87,3 +89,19 @@ onMounted(async () => {
 		</article>
 	</main>
 </template>
+
+<style lang="scss" scoped>
+:deep(iframe) {
+  @apply w-3/4 aspect-video mx-auto;
+}
+:deep(p iframe) {
+  @apply w-full h-full aspect-video mx-auto;
+}
+
+:deep(p) {
+  @apply prose lg:prose-xl mx-auto;
+}
+:deep(.twitter-tweet) {
+  @apply mx-auto;
+}
+</style>
