@@ -98,9 +98,25 @@ onMounted(async () => {
   @apply w-full h-full aspect-video mx-auto;
 }
 
-:deep(p, ul, ol, h2, h3, h4) {
-  @apply prose lg:prose-xl mx-auto;
+:deep(h2) {
+  @apply text-3xl;
 }
+:deep(h3) {
+  @apply text-2xl;
+}
+:deep(h4) {
+  @apply text-xl;
+}
+
+:deep(p),
+:deep(ul),
+:deep(ol),
+:deep(h2),
+:deep(h3),
+:deep(h4) {
+  @apply mt-8 prose lg:prose-xl mx-auto;
+}
+
 :deep(.twitter-tweet) {
   @apply mx-auto;
 }
