@@ -10,7 +10,7 @@ const loading = ref(false);
 onMounted(async () => {
 	loading.value = true;
 	try {
-		const result = await fetch(`${import.meta.env.VITE_API_URL}/posts?tags=${route.params.id}`);
+		const result = await fetch(`${import.meta.env.VITE_API_URL}/posts?tags=${route.params.id}&per_page=100`);
 		items.value = await result.json();
 
 		if (result.status !== 200) {

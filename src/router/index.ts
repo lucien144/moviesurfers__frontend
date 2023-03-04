@@ -19,11 +19,11 @@ const router = createRouter({
 			props: { type: 'news' },
 		},
 		{
-			path: '/:category/',
+			path: '/:slug--:id/',
 			name: 'category',
 			component: CategoryView,
 		},{
-			path: '/tag/:slug/:id/',
+			path: '/tag/:slug--:id/',
 			name: 'tag',
 			component: TagView,
 		},

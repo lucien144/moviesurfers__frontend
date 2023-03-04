@@ -10,7 +10,7 @@ const loading = ref(false);
 onMounted(async () => {
 	loading.value = true;
 	try {
-		const result = await fetch(`${import.meta.env.VITE_API_URL}/category/${route.params.category}`);
+		const result = await fetch(`${import.meta.env.VITE_API_URL}/posts?categories=${route.params.id}&per_page=100`);
 		items.value = await result.json();
 
 		if (result.status !== 200) {
@@ -34,8 +34,8 @@ onMounted(async () => {
 				</RouterLink>
 			</nav>
 
-		<div class="prose lg:prose-xl mx-auto text-center pb-16">
-			<h2 class="capitalize">{{ route.params.category }}</h2>
+		<div v-if="items[0]" class="prose lg:prose-xl mx-auto text-center pb-16">
+			<h2 class="capitalize">{{ items[0].categories.find((tag) => tag.id === Number.parseInt(route.params.id)).title }}</h2>
 		</div>
 
 		<div class="columns-1 lg:columns-3 space-y-16">

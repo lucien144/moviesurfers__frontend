@@ -70,7 +70,7 @@ onMounted(async () => {
 						:key="tag.id"
 						class="text-lg italic underline"
 				>
-					<RouterLink :to="`/tag/${tag.slug}/${tag.id}`">#{{ tag.title }}</RouterLink>
+					<RouterLink :to="`/tag/${tag.slug}--${tag.id}`">#{{ tag.title }}</RouterLink>
 				</li>
 			</ul>
 

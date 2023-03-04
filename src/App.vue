@@ -28,15 +28,17 @@ onMounted(async () => {
 				<h1 class="text-4xl font-extrabold"><RouterLink to="/">Movie Surfers</RouterLink></h1>
 				<nav>
 					<ul class="flex space-x-16">
-						<li v-for="category in categories" :key="category.id">
-							<RouterLink
-								:to="`/${category.slug}/`"
-								class="underline"
-								:class="{
-									'font-bold': router.currentRoute.value.fullPath === `/${category.slug}/`
-								}"
-							>{{ category.name }}</RouterLink>
-						</li>
+						<template v-for="category in categories" :key="category.id">
+							<li v-if="['Recenze', 'Trailer', 'Kultovky'].includes(category.name)">
+								<RouterLink
+									:to="`/${category.slug}--${category.id}/`"
+									class="underline"
+									:class="{
+										'font-bold': router.currentRoute.value.fullPath === `/${category.slug}/`
+									}"
+								>{{ category.name }}</RouterLink>
+							</li>
+						</template>
 					</ul>
 				</nav>
 			</div>
