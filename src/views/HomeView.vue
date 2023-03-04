@@ -80,8 +80,10 @@ onMounted(async () => {
 
 <template>
 	<main class="container mx-auto py-16">
-		<section v-if="stickies.length"
-				 class="hero w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:h-[60vh] md:min-h-[640px]">
+		<section
+			v-if="stickies.length"
+			class="hero w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:h-[60vh] md:min-h-[640px]"
+		>
 			<div
 				v-for="movie in stickies"
 				:key="movie.id"
@@ -105,9 +107,14 @@ onMounted(async () => {
 		<template v-for="(section, index) in [trailers, reviews]" :key="index">
 			<div :class="{'grid grid-cols-5 gap-8': index === 1}">
 				<section v-if="section.length > 0" class="mt-32 col-span-12 lg:col-span-3">
-					<h2 class="text-2xl font-extrabold border-b-2 pb-8 mb-8">
-						{{ index === 0 ? 'Trailery' : 'Recenze' }}
-					</h2>
+					<div class="flex justify-between items-center border-b-2 pb-8 mb-8">
+						<h2 class="text-2xl font-extrabold">
+							{{ index === 0 ? 'Trailery' : 'Recenze' }}
+						</h2>
+						<RouterLink :to="`/${index === 0 ? 'trailer' : 'recenze'}/`" class="mr-16">
+							Zobrazit vše &rarr;
+						</RouterLink>
+					</div>
 					<div
 						class="grid grid-cols-1 gap-8 pb-16"
 						:class="{

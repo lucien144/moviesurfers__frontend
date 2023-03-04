@@ -59,7 +59,20 @@ onMounted(async () => {
 			/>
 			<img v-else-if="movie.featured_media" :src="movie.featured_media" class="max-h-[80vh] w-full object-cover">
 
-			<div v-html="movie.content"/>
+			<div
+				v-html="movie.content"
+				class="my-32"
+			/>
+
+			<ul v-if="movie.tags" class="flex">
+				<li
+						v-for="tag in movie.tags"
+						:key="tag.id"
+						class="text-lg italic underline"
+				>
+					<RouterLink :to="`/tag/${tag.slug}/${tag.id}`">#{{ tag.title }}</RouterLink>
+				</li>
+			</ul>
 
 			<div v-if="props.type === 'posts'" class="prose lg:prose-xl mx-auto">
 				<div class="flex justify-end">
