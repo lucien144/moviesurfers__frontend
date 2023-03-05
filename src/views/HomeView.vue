@@ -111,7 +111,7 @@ onMounted(async () => {
 						<h2 class="text-2xl font-extrabold">
 							{{ index === 0 ? 'Trailery' : 'Recenze' }}
 						</h2>
-						<RouterLink :to="`/${index === 0 ? 'trailer' : 'recenze'}/`" class="mr-16">
+						<RouterLink :to="`/${index === 0 ? 'trailer--4' : 'recenze--8'}/`" class="mr-16 underline hover:no-underline">
 							Zobrazit vše &rarr;
 						</RouterLink>
 					</div>
